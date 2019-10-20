@@ -4,7 +4,60 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-  
+  {
+    path: '/',
+    name: 'home',
+    meta: { layout: 'Main' },
+    component: () => import('@/views/Home')
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: { layout: 'Empty' },
+    component: () => import('@/views/Login')
+  },
+  {
+    path: '/register',
+    name: 'register',
+    meta: { layout: 'Empty' },
+    component: () => import('@/views/Register')
+  },
+  {
+    path: '/categories',
+    name: 'categories',
+    meta: { layout: 'Main' },
+    component: () => import('@/views/Categories')
+  },
+  {
+    path: '/detail',
+    name: 'detail',
+    meta: { layout: 'Main' },
+    component: () => import('@/views/Detail')
+  },
+  {
+    path: '/history',
+    name: 'history',
+    meta: { layout: 'Main' },
+    component: () => import('@/views/History')
+  },
+  {
+    path: '/planning',
+    name: 'planning',
+    meta: { layout: 'Main' },
+    component: () => import('@/views/Planning')
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    meta: { layout: 'Main' },
+    component: () => import('@/views/Profile')
+  },
+  {
+    path: '/record',
+    name: 'record',
+    meta: { layout: 'Main' },
+    component: () => import('@/views/Record')
+  },
 ]
 
 const router = new VueRouter({

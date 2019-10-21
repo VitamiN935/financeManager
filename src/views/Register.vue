@@ -40,26 +40,25 @@
       </div>
 
       <div class="input-field">
-        <input 
-        id="name" 
-        type="text" 
-        v-model.trim="name" 
-        :class="{invalid: $v.name.$dirty && !$v.name.required}"
+        <input
+          id="name"
+          type="text"
+          v-model.trim="name"
+          :class="{invalid: $v.name.$dirty && !$v.name.required}"
         />
         <label for="name">Имя</label>
-        <small 
-        class="helper-text invalid" 
-        v-if="$v.name.$dirty && !$v.name.required"
+        <small
+          class="helper-text invalid"
+          v-if="$v.name.$dirty && !$v.name.required"
         >Укажите ваше имя</small>
       </div>
 
       <p>
         <label>
-          <input type="checkbox" v-model="agree"/>
+          <input type="checkbox" v-model="agree" />
           <span>С правилами согласен</span>
         </label>
       </p>
-
     </div>
     <div class="card-action">
       <div>
@@ -111,7 +110,7 @@ export default {
   },
 
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
@@ -123,7 +122,10 @@ export default {
         name: this.name
       };
 
-      this.$router.push("/");
+      try {
+        await this.$store.dispatch("register", formData);
+        this.$router.push("/");
+      } catch (e) {}
     }
   }
 };

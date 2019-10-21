@@ -57,8 +57,9 @@
 </template>
 
 <script>
-import { email, required, minLength } from "vuelidate/lib/validators";
-import constants from "@/script/constants";
+import { email, required, minLength } from "vuelidate/lib/validators"
+import constants from "@/script/constants"
+import messages from '@/plugins/messages'
 
 export default {
   name: "login",
@@ -81,8 +82,14 @@ export default {
     }
   },
 
+  mounted() {
+    if (messages[this.$route.query.message]) {
+      this.$message(messages[this.$route.query.message]);
+    }
+  },
+
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (this.$v.$invalid) {
         this.$v.$touch();
         return;
@@ -93,7 +100,10 @@ export default {
         password: this.password
       }
 
-      this.$router.push("/");
+      try {
+        await this.$store.dispatch('login', formData);
+        this.$router.push("/");
+      } catch (e) {}
     }
   }
 };

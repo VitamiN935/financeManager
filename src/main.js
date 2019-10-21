@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import Vuelidate from 'vuelidate'
 import dateFilter from '@/filters/date.filter'
+import currencyFilter from '@/filters/currency.filter'
 import router from './router'
 import store from './store'
 import messagePlugin from '@/plugins/message.plugin'
@@ -15,6 +16,7 @@ import 'firebase/database'
 Vue.config.productionTip = false
 
 Vue.filter('date', dateFilter);
+Vue.filter('currency', currencyFilter);
 Vue.use(messagePlugin);
 Vue.use(Vuelidate);
 

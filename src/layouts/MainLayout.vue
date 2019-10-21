@@ -34,6 +34,12 @@ export default {
   components: {
     Navbar,
     Sidebar
+  },
+
+  async mounted() {
+    try {
+      await this.$store.dispatch('fetchInfo');
+    } catch (e) {}
   }
 }
 </script>

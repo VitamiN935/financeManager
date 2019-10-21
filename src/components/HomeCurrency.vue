@@ -15,10 +15,10 @@
           </thead>
 
           <tbody>
-            <tr>
-              <td>руб</td>
-              <td>12121</td>
-              <td>12.12.12</td>
+            <tr v-for="cur of currency" :key="cur">
+              <td>{{cur}}</td>
+              <td>{{rates[cur].toFixed(5)}}</td>
+              <td>{{date | date}}</td>
             </tr>
           </tbody>
         </table>
@@ -26,3 +26,20 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: "homecurrency",
+
+  props: {
+    rates: Object,
+    date: String
+  },
+
+  data() {
+    return {
+      currency: ["RUB", "USD", "EUR"]
+    };
+  }
+};
+</script>

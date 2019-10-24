@@ -73,8 +73,10 @@
 
 <script>
 import Loader from "@/components/app/Loader";
+import { mapGetters } from "vuex";
 import { required, minValue } from "vuelidate/lib/validators";
 import constants from "@/script/constants";
+import currencyFilter from "@/filters/currency.filter";
 
 export default {
   name: "record",
@@ -104,6 +106,10 @@ export default {
     }
   },
 
+  computed: {
+    ...mapGetters(["info"])
+  },
+
   async mounted() {
     this.categories = await this.$store.dispatch("fetchCategories");
     this.selectCategory = this.categories[0].id;
@@ -121,23 +127,38 @@ export default {
         return;
       }
 
-      const record = {
-        amount: this.amount,
-        description: this.description,
-        type: this.type,
-        categoryType: this.selectCategory,
-        date: new Date().toJSON()
-      };
+      if (this.type === "outcome" && this.amount > this.info.bill) {
+        this.$message(
+          `Недостаточно средств ${currencyFilter(
+            Math.abs(this.amount - this.info.bill),
+            "RUB"
+          )}`
+        );
+      } else {
+        try {
+          const record = {
+            amount: this.amount,
+            description: this.description,
+            type: this.type,
+            categoryType: this.selectCategory,
+            date: new Date().toJSON()
+          };
 
-      try {
-        await this.$store.dispatch("createRecord", record);
-        this.$message("Добавлена запись");
+          const bill =
+            this.type === "outcome"
+              ? this.info.bill - this.amount
+              : this.info.bill + this.amount;
 
-        (this.description = ""),
-          (this.type = "outcome"),
-          (this.amount = constants.MIN_VALUE_RECORD);
-        this.$v.$reset();
-      } catch (e) {}
+          await this.$store.dispatch("updateInfo", { bill });
+          await this.$store.dispatch("createRecord", record);
+          this.$message("Добавлена запись");
+
+          (this.description = ""),
+            (this.type = "outcome"),
+            (this.amount = constants.MIN_VALUE_RECORD);
+          this.$v.$reset();
+        } catch (e) {}
+      }
     }
   }
 };
